@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - master
-    - testing
+      - master
+      - testing
 jobs:
   library:
     #    if: github.event.comment.body == 'test core'
@@ -28,6 +28,13 @@ jobs:
       uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('haupt/requirements/*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
     - name: Upgrade pip
       run: |
         which python
